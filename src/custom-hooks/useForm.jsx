@@ -1,28 +1,31 @@
-import { useState,useEffect} from 'react';
+import { useState,useEffect } from "react";
 
-const useForm = ()=>{
-    const [values,setvalues] = useState({
-        username:'',
-        email:'',
-        password:'',
-        password2:'',
-    })
+const useForm = (validate) => {
+  const [values, setvalues] = useState({
+    username: "",
+    email: "",
+    password: "",
+    password2: "",
+  });
 
-    const [errors,setErrors] = useState({})
+  const [errors, setErrors] = useState({});
+  const [isSubmitting,setIsSubmitting] = useState(false)
 
-    const handleChange = (e)=>{
-        const {name,value} = e.target
-        setvalues({
-            ...values,
-            [name] : value
-        })
-    }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setvalues({
+      ...values,
+      [name]: value,
+    });
+  };
 
-    const handleSubmit = (e)=>{
-        e.preventDefault()
-        console.log('Submited the form');
-    }
-    return  {handleChange,values,handleSubmit}
-}
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setErrors(validate(values));
+    setIsSubmitting(true)
+  };
+
+  return {errors, values,handleChange, handleSubmit,isSubmitting };
+};
 
 export default useForm;
